@@ -21,7 +21,6 @@ function generateMnemonic(input, phraseLength, chain) {
     if (phraseLength === 12 || phraseLength === 18 || phraseLength === 24) {
         entropyLength = phraseLength === 12 ? 128 : phraseLength === 18 ? 192 : 256;
     } if (phraseLength !== 12 && phraseLength !== 18 && phraseLength !== 24) {
-        console.log("Length:", phraseLength);
         throw new Error(`Invalid Mnemonic Phrase Length! Must be 12, 18, or 24.`)
     }
 
