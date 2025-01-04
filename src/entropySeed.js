@@ -3,7 +3,7 @@ const seedrandom = require('seedrandom');
 const validateManualInput = require('./manualInput');
 const validateMRZInput = require('./mrzInput');
 
-function generateEntropy(inputs) {
+function getEntropySeed(inputs) {
     let validatedInputs;
 
     // Check the type of input and validate accordingly
@@ -56,7 +56,7 @@ function generateEntropy(inputs) {
     // Join the shuffled array back into a string and append the checksum
     entropySeed = entropyArray.join('') + checksum;
 
-    return { entropySeed };
+    return entropySeed;
 }
 
-module.exports = generateEntropy;
+module.exports = getEntropySeed;
