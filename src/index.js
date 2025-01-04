@@ -1,45 +1,22 @@
-const generateEntropy = require('./entropy');
-const { seededMnemonic } = require('seeded-mnemonic');
+const getEntropySeed = require('./entropySeed');
+const generateMnemonic = require('./mnemonic');
 
-function generateIdentityBoundAccount(inputData, seedLength, chain, options = {}) {
-    const { returnEntropySeed = false, returnBits = false } = options;
-    try {
-        const result = generateEntropy(inputData);
+function identityBoundAccount(input, phraseLength, chain, returnSeed = null, returnEntropy = null) {
+    const entropySeed = getEntropySeed(input);
 
-        let mnemonicResult;
-        switch (seedLength) {
-            case 12:
-            case 18:
-            case 24:
-                mnemonicResult = seededMnemonic.string(
-                    result.entropySeed,
-                    seedLength,
-                    chain,
-                    returnBits ? { returnBits: true } : {}
-                );
-                break;
-            default:
-                throw new Error('Invalid seed length. Must be 12, 18, or 24.');
-        }
+    const mnemonic = generateMnemonic(entropySeed, phraseLength, chain);
 
-        // Ensure seedPhrase is always included in the response
-        const response = {
-            seedPhrase: mnemonicResult.seedPhrase,
-        };
-
-        if (returnEntropySeed) {
-            response.entropySeed = result.entropySeed;
-        }
-
-        if (returnBits) {
-            response.bits = mnemonicResult.bits;
-        }
-
-        return response;
-
-    } catch (error) {
-        throw error;
+    let result = {
+        mnemonic: mnemonic.phrase
     }
+
+    if (returnSeed) {
+        result.seed = entropySeed;
+    } if (returnEntropy) {
+        result.entropy = mnemonic.entropy;
+    }
+
+    return result;
 }
 
-module.exports = { generateIdentityBoundAccount };
+module.exports = identityBoundAccount;

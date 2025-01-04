@@ -27,11 +27,16 @@ function generateMnemonic(input, phraseLength, chain) {
     const entropy = ent.slice(0, entropyLength);
     const mnemonic = bip39.core.toMnemonic(wordlist, entropy);
 
+    const result = {
+        phrase: mnemonic,
+        entropy: hash
+    }
+
     const valid = bip39.core.validate(wordlist, mnemonic);
     if (!valid) {
         throw new Error(`Invalid Mnemonic Phrase Generated.`);
     } if (valid) {
-        return mnemonic
+        return result;
     }
 }
 
